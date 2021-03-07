@@ -36,12 +36,23 @@ export default {
     },
     provide() {
         return {
-            resources: this.storedResources
+            resources: this.storedResources,
+            submitResource: this.submitResource,
         }
     },
     methods: {
         changeTab(tab) {
             this.selectedTab = tab;
+        },
+        submitResource(title,description,url) {
+            const newResource = {
+                id: new Date().toISOString,
+                title: title,
+                description: description,
+                link: url,
+            };
+            this.storedResources.unshift(newResource);
+            this.selectedTab = 'stored-resource';
         }
     },
     computed: {
