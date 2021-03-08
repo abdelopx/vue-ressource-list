@@ -3,7 +3,9 @@
   <base-button @click="changeTab('stored-resource')" :class="storedResourceButton">Show resources</base-button>
   <base-button @click="changeTab('add-resource')" :class="addResourceButton">Add resources</base-button>
   </base-card>
+  <keep-alive>
   <component :is="selectedTab"></component>
+  </keep-alive>
 </template>
 
 <script>
@@ -38,6 +40,7 @@ export default {
         return {
             resources: this.storedResources,
             submitResource: this.submitResource,
+            deleteResource: this.deleteResource,
         }
     },
     methods: {
@@ -53,6 +56,11 @@ export default {
             };
             this.storedResources.unshift(newResource);
             this.selectedTab = 'stored-resource';
+        },
+        deleteResource(id) {
+            const resourceIndex = this.storedResources.findIndex(resource => resource.id === id);
+            console.log(resourceIndex);
+            this.storedResources.splice(resourceIndex,1);
         }
     },
     computed: {

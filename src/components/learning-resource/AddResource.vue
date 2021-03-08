@@ -1,7 +1,16 @@
 <template>
-  <h1>Add a ressource</h1>
+<base-dialog v-if="isInvalid" title="Invalid Input">
+    <template #default>
+        <p>Please fill in all the required inputs to add a resource to the list.</p>
+    </template>
+    <template #actions>
+        <base-button @click="closeDialog">Okay</base-button>
+    </template>
+</base-dialog>
+<h1>Add a ressource</h1>
   <base-card>
     <form @submit.prevent="submitData">
+        
         <div class="form-control">
             <base-card>
             <label for="name">Name</label>
@@ -28,18 +37,33 @@
 </template>
 
 <script>
+import BaseButton from '../UI/BaseButton.vue';
 import BaseCard from '../UI/BaseCard.vue'
+import BaseDialog from '../UI/BaseDialog.vue';
 export default {
   inject: ['submitResource'],
-  components: { BaseCard },
+  components: { BaseCard, BaseDialog, BaseButton },
+  data () {
+    return {
+        isInvalid: false,
+    }
+  },
   methods: {
       submitData() {
           const enteredTitle = this.$refs.titleInput.value;
           const enteredDescription = this.$refs.descriptionInput.value;
           const enteredUrl = this.$refs.urlInput.value;
 
+          if (enteredTitle.trim() === '' || enteredTitle.trim() === '' || enteredUrl.trim() === '' ) {
+              this.isInvalid = true;
+          }
+          else {
           this.submitResource(enteredTitle,enteredDescription,enteredUrl);
-      }
+          }
+      },
+      closeDialog() {
+          this.isInvalid = false;
+      },
   },
 
 }
@@ -48,7 +72,7 @@ export default {
 <style scoped>
 
 h1 {
-    margin: auto;
+    margin-left: 25rem;
 }
 
 .form-control {
